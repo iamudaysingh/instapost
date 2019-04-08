@@ -13,9 +13,13 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import red from '@material-ui/core/colors/red';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
+import CommentIcon from '@material-ui/icons/Comment';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state/index';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Divider from '@material-ui/core/Divider';
 
 const styles = theme => ({
   card: {
@@ -27,6 +31,7 @@ const styles = theme => ({
   },
   actions: {
     display: 'flex',
+    align: 'right',
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -44,88 +49,124 @@ const styles = theme => ({
 });
 
 class ShowPosts extends React.Component {
-  state = { expanded: false };
-  
+  state = {
+    openMenu: false,
+  };
+
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
   };
 
+  handleRender = (posts) => {
+    console.log('inside handle render', posts);
+    const { classes, post } = this.props;
+    return (
+      <p></p>
+    );
+  }
+  handleLike = () => {
+
+    console.log('like');
+  }
+
+  optionsHandler = () => {
+
+    this.setState({
+      openMenu: true,
+    })
+
+  }
+
+  menuHandler = () =>{
+    return (
+      <PopupState variant="popover" popupId="demo-popup-menu">
+        {popupState => (
+          <React.Fragment>
+            {/* <Button variant="contained" {...bindTrigger(popupState)}>
+              Open Menu
+            </Button> */}
+            <Menu {...bindMenu(popupState)}>
+              <MenuItem onClick={popupState.close}>Cake</MenuItem>
+              <MenuItem onClick={popupState.close}>Death</MenuItem>
+            </Menu>
+          </React.Fragment>
+        )}
+      </PopupState>
+    );
+  }
+  
+
+
+
   render() {
+    const { anchorEl, mobileMoreAnchorEl } = this.state;
     const { classes } = this.props;
+    const isMenuOpen = Boolean(anchorEl);
+    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const { openMenu } = this.state;
     console.log('inside show posts', this.props.post);
-    const {post} = this.props; 
+    const { post } = this.props;
+    let newPosts = post.reverse();
+    console.log('new posts', newPosts);
+    const allPost = newPosts.map(i => {
+      return (
+        <>
+          <Card className={classes.card}>
+            <CardHeader
+              avatar={
+                <Avatar aria-label="Recipe" className={classes.avatar}>
+
+                </Avatar>
+              }
+              action={
+                <IconButton onClick={this.optionsHandler}>
+                  <MoreVertIcon />
+                </IconButton>
+              }
+              title="Uday"
+              subheader={
+                Date(Date.now()).toString()
+              }
+            />
+            <CardContent>
+              <Typography component="p">
+                {i}
+              </Typography>
+            </CardContent>
+            <CardActions className={classes.actions} disableActionSpacing>
+              <IconButton aria-label="Add to favorites" onClick={this.handleLike}>
+                <FavoriteIcon />
+              </IconButton>
+              <IconButton aria-label="Share">
+                <CommentIcon />
+              </IconButton>
+            </CardActions>
+          </Card>
+          {/* {openMenu ? this.menuHandler : ''} */}
+          {openMenu ?   <PopupState variant="popover" popupId="demo-popup-menu">
+        {popupState => (
+          <React.Fragment>
+            {/* <Button variant="contained" {...bindTrigger(popupState)}>
+              Open Menu
+            </Button> */}
+            <Menu {...bindMenu(popupState)}>
+              <MenuItem onClick={popupState.close}>Cake</MenuItem>
+              <MenuItem onClick={popupState.close}>Death</MenuItem>
+            </Menu>
+          </React.Fragment>
+        )}
+      </PopupState> : ''}
+          <Divider light={true} />
+        </>
+      )
+    }
+
+    )
 
     return (
-      <Card className={classes.card}>
-        <CardHeader
-          avatar={
-            <Avatar aria-label="Recipe" className={classes.avatar}>
-
-            </Avatar>
-          }
-          action={
-            <IconButton>
-              <MoreVertIcon />
-            </IconButton>
-          }
-          title="Shrimp and Chorizo Paella"
-          subheader="September 14, 2016"
-        />
-        <CardMedia
-          className={classes.media}
-          image="/static/images/cards/paella.jpg"
-          title="Paella dish"
-        />
-        <CardContent>
-          <Typography component="p">
-            {post}
-          </Typography>
-        </CardContent>
-        <CardActions className={classes.actions} disableActionSpacing>
-          <IconButton aria-label="Add to favorites">
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton aria-label="Share">
-            <ShareIcon />
-          </IconButton>
-          <IconButton
-            className={classnames(classes.expand, {
-              [classes.expandOpen]: this.state.expanded,
-            })}
-            onClick={this.handleExpandClick}
-            aria-expanded={this.state.expanded}
-            aria-label="Show more"
-          >
-            <ExpandMoreIcon />
-          </IconButton>
-        </CardActions>
-        {/* <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-          <CardContent>
-            <Typography paragraph>Method:</Typography>
-            <Typography paragraph>
-                 {post}
-            </Typography>
-            <Typography paragraph>
-              Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over medium-high
-              heat. Add chicken, shrimp and chorizo, and cook, stirring occasionally until lightly
-              browned, 6 to 8 minutes. Transfer shrimp to a large plate and set aside, leaving
-              chicken and chorizo in the pan. Add pimentón, bay leaves, garlic, tomatoes, onion,
-              salt and pepper, and cook, stirring often until thickened and fragrant, about 10
-              minutes. Add saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
-            </Typography>
-            <Typography paragraph>
-              Add rice and stir very gently to distribute. Top with artichokes and peppers, and cook
-              without stirring, until most of the liquid is absorbed, 15 to 18 minutes. Reduce heat
-              to medium-low, add reserved shrimp and mussels, tucking them down into the rice, and
-              cook again without stirring, until mussels have opened and rice is just tender, 5 to 7
-              minutes more. (Discard any mussels that don’t open.)
-            </Typography>
-            <Typography>
-              Set aside off of the heat to let rest for 10 minutes, and then serve.
-            </Typography>
-          </CardContent>
-        </Collapse> */}
-      </Card>
+      <div style={{ fullWidth: true }}>
+        {allPost}
+      </div>
     );
   }
 }

@@ -15,41 +15,60 @@ import withMobileDialog from "@material-ui/core/withMobileDialog";
 class PostsDialog extends React.Component {
   state = {
     open: false,
-    posts: "",
+    posts: '',
+    finalPost:'',
+    valid:false,
     showPost: false,
   };
 
   handleCloseChange = field => event => {
+    console.log('event inside ', event.target.value);
+    // arr=[];
+    // let arr = this.state.posts.slice();
+    // arr.push(event.target.value);
+    // console.log('inside handle close change', arr);
+    const {posts} = this.state;
     this.setState({
-      [field]: event.target.value
+    valid:false,
+     posts: event.target.value,
     });
   };
 
   handleClickOpen = () => {
     this.setState({
       open: true,
-      posts: ""
+      // posts: ""
     });
   };
 
-  handleClose = () => {
+  handleClose = field => (event) => {
+    const{ open, showPost,posts,finalPost}=this.state;
+    console.log('event', event.target.value);
     this.setState({
       open: false,
       showPost: true,
+      validPost:true,
+      finalPost:[...finalPost,posts],
+      posts:''
+      // posts:[...posts,event.target.value]
     });
   };
 
   handleCloseBack = () => {
     this.setState({
       open: false,
-      posts: ""
+      // posts: ""
     });
   };
 
   render() {
     const { fullScreen, classes } = this.props;
-    const { posts, showPost } = this.state;
-    const value = posts;
+    const { posts, showPost, finalPost } = this.state;
+    const value = finalPost;
+    // if(posts){
+    // value.unshift(posts);
+    // }
+    console.log('value', value);
     console.log("state", this.state);
     return (
       <>
@@ -68,7 +87,7 @@ class PostsDialog extends React.Component {
           aria-labelledby="responsive-dialog-title"
         >
           <DialogTitle id="responsive-dialog-title">
-            {"Use Google's location service?"}
+            {"What's on your Mind?"}
           </DialogTitle>
           <DialogContent>
             <DialogContentText>
@@ -86,10 +105,10 @@ class PostsDialog extends React.Component {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleCloseBack} color="primary">
+             <Button onClick={this.handleCloseBack} color="primary">
               Back
             </Button>
-            <Button onClick={this.handleClose} color="primary" autoFocus>
+            <Button onClick={this.handleClose("posts")} color="primary" autoFocus>
               Post
             </Button>
           </DialogActions>

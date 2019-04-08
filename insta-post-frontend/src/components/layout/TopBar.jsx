@@ -112,6 +112,9 @@ class TopBar extends React.Component {
         this.setState({ mobileMoreAnchorEl: null });
     };
 
+
+    
+
     render() {
         const { anchorEl, mobileMoreAnchorEl } = this.state;
         const { classes } = this.props;
@@ -219,7 +222,7 @@ class TopBar extends React.Component {
                     </Toolbar>
                 </AppBar>
                 {renderMenu}
-                {renderMobileMenu}
+                {/* {renderMobileMenu} */}
             </div>
             <div>
                 <Posts></Posts>
