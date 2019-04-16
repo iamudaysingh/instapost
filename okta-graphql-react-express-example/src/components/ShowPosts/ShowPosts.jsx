@@ -43,7 +43,6 @@ const styles = (theme) => ({
 class ShowPosts extends React.Component {
     state={
         liked:false,
-        color:'red',
         counter:0,
     }
 
@@ -70,7 +69,7 @@ class ShowPosts extends React.Component {
     };
 
     handleLike = () => {
-        const{liked, color, counter}= this.state;
+        const { liked, counter } = this.state;
         if(liked)
         {
         this.setState({
@@ -91,9 +90,6 @@ class ShowPosts extends React.Component {
     render() {
         const { classes, data} = this.props;
         const newArray = this.getSortedData(data);
-        console.log('data', data);
-        console.log('newArray', newArray);
-        console.log('state', this.state);
         return (
             newArray.map(post => (
                 <div>
@@ -107,7 +103,7 @@ class ShowPosts extends React.Component {
                                 }
                                 action={
                                     (post.createdBy === 'Piyush')
-                                     ?  <MenuBar data={post} />
+                                    ?  <MenuBar data={post} />
                                     : ''    
                                 }
                                 title={post.createdBy}

@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Container } from 'reactstrap';
 import Posts from './components/pages/Posts';
-import PostViewer from './PostViewer';
-import PostEditor from './PostEditor';
 import withAuth from './withAuth';
 
 class App extends Component {
@@ -13,21 +11,12 @@ class App extends Component {
   render() {
     const { auth } = this.props;
     if (auth.loading) return null;
-
     const { user, login, logout } = auth;
-    const { editing } = this.state;
 
     return (
       <Container fluid>
         {user ? (
           <div>
-            {/* <Button
-              className="my-2"
-              color="primary"
-              onClick={() => this.setState({ editing: {} })}
-            >
-              New Post
-            </Button> */}
             <Posts />
             <Button
               className="m-2"
