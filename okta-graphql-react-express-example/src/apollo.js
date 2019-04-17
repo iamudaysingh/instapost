@@ -1,6 +1,7 @@
 import { ApolloClient, InMemoryCache } from 'apollo-boost';
 import { split } from "apollo-client-preset";
 import { HttpLink } from "apollo-link-http";
+import { setContext } from 'apollo-link-context';
 import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
 let auth;
@@ -12,6 +13,17 @@ const httpLink = new HttpLink({
   uri: "http://localhost:4000/graphql"
 });
   
+
+const authLink = setContext(async (_, { headers } ) => {
+  const token = await auth.getAccessToken();
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
+    }
+  }
+});
+
 const wsLink = new WebSocketLink({
   uri: `ws://localhost:4000/graphql`,
   options: {
@@ -25,18 +37,10 @@ const link = split(
   return kind === "OperationDefinition" && operation === "subscription";
   },
   wsLink,
-  httpLink,
+  authLink.concat(httpLink),
 );
 
 export default new ApolloClient({
   link,
   cache: new InMemoryCache(),
-  request: async (operation) => {
-    const token = await auth.getAccessToken();
-    operation.setContext({
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
-  },
 });
