@@ -16,7 +16,7 @@ const styles = theme => ({
 function Posts(props) {
   const { classes } = props;
   return (
-    <div>
+    <div align="center">
       <Paper className={classes.root} elevation={1}>
         <Typography variant="h5" component="h3">
           What's on your Mind ?

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Container } from 'reactstrap';
+import NavBar from './components/layout/NavBar';
+import TopBar from './components/layout/TopBar';
 import Posts from './components/pages/Posts';
 import withAuth from './withAuth';
 
@@ -10,32 +12,26 @@ class App extends Component {
 
   render() {
     const { auth } = this.props;
+    console.log('props', this.props);
+    const{match}=this.props;
+    console.log('match',match.path);
+    console.log('auth', auth);
     if (auth.loading) return null;
     const { user, login, logout } = auth;
-
+  
     return (
+      <div>
       <Container fluid>
         {user ? (
           <div>
+            <TopBar logout={() => logout()}/>
             <Posts />
-            <Button
-              className="m-2"
-              color="secondary"
-              onClick={() => logout()}
-            >
-              Sign Out (signed in as {user.name})
-            </Button>
           </div>
         ) : (
-          <Button
-            className="my-2"
-            color="primary"
-            onClick={() => login()}
-          >
-            Sign In
-          </Button>
+          <NavBar login={() => login()}/>
         )}
       </Container>
+      </div>
     );
   }
 }

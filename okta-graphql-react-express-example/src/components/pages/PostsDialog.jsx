@@ -86,7 +86,7 @@ class PostsDialog extends React.Component {
               <div>
                 <Mutation mutation={ADD_POST}>
                   {(createPost) => (
-                    <div>
+                    <div align="center">
                       <Button
                         variant="outlined"
                         color="primary"

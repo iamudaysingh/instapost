@@ -5,6 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import UserForm from '../SignUp/UserForm';
 import { Link as RouterLink } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
 
@@ -15,36 +16,47 @@ const styles = {
   grow: {
     flexGrow: 1,
   },
-  logout: {
-    flexGrow: 0.07,
-  },
+
 };
 
 
 class Navbar extends React.Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      signup: false,
+    };
+  }
+
+
+  handleSignUp = () => {
+   this.setState(
+     {
+       signup: true,
+     }
+   )
   }
 
   render() {
-    const { classes } = this.props;
-
+    const { classes, login } = this.props;
+    const{signup}= this.state;
+    console.log('props', this.props);
     return (
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h4 " color="inherit" className={classes.grow}>
-                       Welcome To Insta Post : Connecting People
+              Welcome To Insta Post : Connecting People
             </Typography>
-            <Link component={RouterLink} to="/login" color="inherit" underline="none">
-              <Button color="inherit">LOGIN</Button>
-            </Link>
-            <Link component={RouterLink} to="/signup" color="inherit" underline="none">
-              <Button color="inherit" className={classes.logout}>Sign Up</Button>
-            </Link>
+
+            <Button color="inherit" onClick={() => login()}>LOGIN</Button>
+
+            <Button color="inherit" onClick={this.handleSignUp}>Sign Up</Button>
           </Toolbar>
         </AppBar>
+        {
+              signup ? <UserForm/> : ''
+        }
       </div>
     );
   }

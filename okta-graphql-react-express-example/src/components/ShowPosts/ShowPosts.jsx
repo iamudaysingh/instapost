@@ -12,6 +12,7 @@ import red from '@material-ui/core/colors/red';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { MenuBar } from '../MenuBar';
 import * as moment from 'moment';
+import Component from '../../withAuth';
 
 const styles = (theme) => ({
     card: {
@@ -48,6 +49,7 @@ class ShowPosts extends React.Component {
 
 
     componentDidMount() {
+   
         const { subscribe } = this.props;
         subscribe();
     };
@@ -88,6 +90,7 @@ class ShowPosts extends React.Component {
     }
 
     render() {
+        console.log('props', this.props);
         const { classes, data} = this.props;
         const newArray = this.getSortedData(data);
         return (
@@ -102,6 +105,7 @@ class ShowPosts extends React.Component {
                                     </Avatar>
                                 }
                                 action={
+
                                     (post.createdBy === 'Piyush')
                                     ?  <MenuBar data={post} />
                                     : ''    
